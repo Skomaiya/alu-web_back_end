@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This script demonstrates how to use Union to create a list containing two different data types.
+This script uses Union to create a list containing two different data types.
 """
 
 from typing import List, Union
@@ -8,9 +8,10 @@ from typing import List, Union
 # Define a type that allows both floats and ints
 ElementType = Union[int, float]
 
+
 def sum_mixed_list(mxd_lst: List[ElementType]) -> float:
     """
-    Computes the sum of all elements in a list of integers and floating-point numbers.
+    Computes the sum of integers and floating-point numbers.
 
     Args:
         mxd_list : A list of integers and floating-point numbers to sum.
