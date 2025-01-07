@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This script defines a type-annotated function to compute the sum of a list of floating-point numbers.
+This script defines a function to sum up a list of floating-point numbers.
 
 Functions:
     sum_list(input_list): Returns the sum of all elements in a list of floats.
