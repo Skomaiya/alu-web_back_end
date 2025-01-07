@@ -18,5 +18,5 @@ def sum_mixed_list(mxd_lst: List[ElementType]) -> float:
     Returns:
         float: The sum of all elements in the mixed list.
     """
-    sum_list = sum(float(mxd_lst))
+    sum_list = sum(mxd_lst)
     return sum_list
