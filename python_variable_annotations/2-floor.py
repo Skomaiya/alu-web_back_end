@@ -3,7 +3,7 @@
 This script defines a function to compute the floor of a floating-point number.
 
 Functions:
-    floor(n): Returns the largest integer less than or equal to the given number.
+    floor(n): Returns the largest integer less than or equal to the set number.
 """
 
 import math
