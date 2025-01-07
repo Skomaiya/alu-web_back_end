@@ -4,8 +4,7 @@ This script defines an async routine `wait_n` that spawns `wait_random`
 n times and returns a sorted list of delays.
 """
 
-from typing import List
-from wait_random import wait_random
+import wait_random
 import asyncio
 
 
