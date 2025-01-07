@@ -9,7 +9,7 @@ Functions:
 import math
 
 
-def floor(n: float) -> float:
+def floor(n: float) -> int:
     """
     Computes the floor of a floating-point number.
 
