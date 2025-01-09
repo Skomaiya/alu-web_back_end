@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 """
-This script defines an asynchronous function `wait_random` that waits for
-a random delay and returns the delay value.
-
-Functions:
-    wait_random(max_delay): Returns a random float value up to max_delay.
+Asynchronous coroutine that waits for a random delay and returns the delay.
 """
 
 import asyncio
@@ -13,14 +9,16 @@ import random
 
 async def wait_random(max_delay: int = 10) -> float:
     """
-    Waits for a random delay between 0 and max_delay and returns the delay.
+    Waits for a random delay between 0 and max_delay seconds and returns
+    the delay.
 
     Args:
         max_delay (int, optional): The maximum delay in seconds.
+                                   Defaults to 10.
 
     Returns:
-        float: The random delay value.
+        float: The actual delay time in seconds.
     """
-    result = random.uniform(0, max_delay)
-    await asyncio.sleep(result)
-    return result
+    delay = random.uniform(0, max_delay)
+    await asyncio.sleep(delay)
+    return delay
