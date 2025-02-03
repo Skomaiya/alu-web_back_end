@@ -12,3 +12,10 @@ class TestGithubOrgClient(unittest.TestCase):
         ('google'),
         ('abc')
     ])
+    @patch('client.get_json')
+    def test_org(self, data, mock):
+        ''' self descriptive '''
+        endpoint = 'https://api.github.com/orgs/{}'.format(data)
+        spec = GithubOrgClient(data)
+        spec.org()
+        mock.assert_called_once_with(endpoint)
