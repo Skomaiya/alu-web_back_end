@@ -1,33 +1,38 @@
 #!/usr/bin/env python3
 """
-A Basic Flask application with user login simulation.
+A Basic flask application
 """
-from typing import Dict, Union
-from flask import Flask, g, request, render_template
+from typing import (
+    Dict, Union
+)
+
+from flask import Flask
+from flask import g, request
+from flask import render_template
 from flask_babel import Babel
 
 
-class Config:
+class Config(object):
     """
-    Application configuration class.
+    Application configuration class
     """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
-# Instantiate Flask application
+# Instantiate the application object
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Initialize Babel for localization
+# Wrap the application with Babel
 babel = Babel(app)
 
 
 @babel.localeselector
 def get_locale() -> str:
     """
-    Determine the best match locale from the request.
+    Gets locale from request object
     """
     locale = request.args.get('locale', '').strip()
     if locale and locale in Config.LANGUAGES:
@@ -35,7 +40,6 @@ def get_locale() -> str:
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-# Mock user database
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
@@ -44,31 +48,29 @@ users = {
 }
 
 
-def get_user(user_id: Union[str, None]) -> Union[Dict[str, Union[str, None]], None]:
+def get_user(id) -> Union[Dict[str, Union[str, None]], None]:
     """
-    Retrieve user dictionary if ID is valid, otherwise return None.
+    Validate user login details
+    Args:
+        id (str): user id
+    Returns:
+        (Dict): user dictionary if id is valid else None
     """
-    try:
-        user_id = int(user_id) if user_id else None
-        return users.get(user_id)
-    except ValueError:
-        return None
+    return users.get(int(id), 0)
 
 
 @app.before_request
 def before_request():
     """
-    Execute before every request:
-    - Retrieve user based on login_as parameter.
-    - Store the user object in Flask's global `g` object.
+    Adds valid user to the global session object `g`
     """
-    g.user = get_user(request.args.get('login_as'))
+    setattr(g, 'user', get_user(request.args.get('login_as', 0)))
 
 
 @app.route('/', strict_slashes=False)
 def index() -> str:
     """
-    Render the main HTML page.
+    Renders a basic html template
     """
     return render_template('5-index.html')
 
