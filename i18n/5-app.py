@@ -1,10 +1,39 @@
 #!/usr/bin/env python3
 """
-Flask app that supports user login simulation with localization.
+A Basic Flask application with user login simulation.
 """
-from flask import Flask, render_template, request, g
+from typing import Dict, Union
+from flask import Flask, g, request, render_template
+from flask_babel import Babel
 
+
+class Config:
+    """
+    Application configuration class.
+    """
+    LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
+
+
+# Instantiate Flask application
 app = Flask(__name__)
+app.config.from_object(Config)
+
+# Initialize Babel for localization
+babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale() -> str:
+    """
+    Determine the best match locale from the request.
+    """
+    locale = request.args.get('locale', '').strip()
+    if locale and locale in Config.LANGUAGES:
+        return locale
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
 
 # Mock user database
 users = {
@@ -15,35 +44,34 @@ users = {
 }
 
 
-def get_user(user_id):
+def get_user(user_id: Union[str, None]) -> Union[Dict[str, Union[str, None]], None]:
     """
-    Retrieve a user dictionary by user ID.
-    Returns None if the user ID is not found.
+    Retrieve user dictionary if ID is valid, otherwise return None.
     """
     try:
-        return users.get(int(user_id))
-    except (ValueError, TypeError):
+        user_id = int(user_id) if user_id else None
+        return users.get(user_id)
+    except ValueError:
         return None
 
 
 @app.before_request
 def before_request():
     """
-    Run before every request.
-    Checks if a user is logged in and sets g.user.
+    Execute before every request:
+    - Retrieve user based on login_as parameter.
+    - Store the user object in Flask's global `g` object.
     """
-    user_id = request.args.get("login_as")
-    g.user = get_user(user_id)
+    g.user = get_user(request.args.get('login_as'))
 
 
-@app.route('/')
-def index():
+@app.route('/', strict_slashes=False)
+def index() -> str:
     """
-    Home page route.
-    Displays a welcome message based on user authentication.
+    Render the main HTML page.
     """
     return render_template('5-index.html')
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run()
